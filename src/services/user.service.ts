@@ -1,9 +1,9 @@
 import { compare, hash } from 'bcrypt'
 import User, { UserAttributes } from '../models/user.model'
 
-interface returnTemplate {
+interface ReturnTemplate {
   status: boolean
-  detail: string
+  message: string
 }
 
 export const findOneUser = async (column: string, value: string): Promise<boolean> => {
@@ -32,7 +32,7 @@ export const updatePassword = async (
   username: string,
   password: string,
   oldPassword: string
-): Promise<returnTemplate> => {
+): Promise<ReturnTemplate> => {
   try {
     const user = await User.findOne({ where: { username } })
 
@@ -40,7 +40,7 @@ export const updatePassword = async (
     if (!user)
       return {
         status: typeof user === null,
-        detail: 'Username is not existed'
+        message: 'Username is not existed'
       }
 
     // check password
@@ -48,7 +48,7 @@ export const updatePassword = async (
     if (!compareResult)
       return {
         status: false,
-        detail: 'Old password is wrong!!!'
+        message: 'Old password is wrong!!!'
       }
     // update password
 
@@ -63,13 +63,13 @@ export const updatePassword = async (
     )
     return {
       status: true,
-      detail: 'Updated password successfully'
+      message: 'Updated password successfully'
     }
   } catch (error) {
     console.log(`Error when update password: ${error}`)
     return {
       status: false,
-      detail: ''
+      message: ''
     }
   }
 }

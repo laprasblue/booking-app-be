@@ -14,4 +14,9 @@ app.use(express.json())
 
 app.use('/api/', router)
 
+if (!process.env.ACCESS_TOKEN_SECRET) {
+  console.log('Please set env variables!!!')
+  process.exit(1)
+}
+
 app.listen(3000, () => console.log('Server is running 3000'))

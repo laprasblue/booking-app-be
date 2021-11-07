@@ -1,9 +1,8 @@
 import { Router } from 'express'
+import { login } from '../controllers/auth.controller'
 
 const authRoute = Router()
 
-authRoute.get('/', (req, res) => {
-  res.sendStatus(200)
-})
+authRoute.post('/login', login)
 
 export default authRoute

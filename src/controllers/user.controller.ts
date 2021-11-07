@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { findOneUser, insertOneUser, updatePassword } from '../services/user.service'
+import { returnBadRequestOr503 } from './common'
 
 export const createUser = async (req: Request, res: Response): Promise<void> => {
   const { username, password, email } = req.body
@@ -42,19 +43,11 @@ export const changePasswordUser = async (req: Request, res: Response): Promise<v
     const query = await updatePassword(username, password, oldPassword)
     if (query.status) {
       res.status(201).json({
-        message: query.detail
+        message: query.message
       })
       return
     }
-    if (query.detail !== '') {
-      res.status(400).json({
-        message: query.detail
-      })
-      return
-    } else {
-      res.sendStatus(503)
-      return
-    }
+    returnBadRequestOr503(res, query.message)
   } catch (error) {
     console.log('Error Change the password: ', error)
     res.sendStatus(503)
